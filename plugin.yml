@@ -1,0 +1,7 @@
+main: ftsos.skywars.Skywars
+version: 0.0.1
+name: Skywars
+commands:
+  skywars:
+    description: A normal Skywars Command /sw help for help
+    aliases: sw
