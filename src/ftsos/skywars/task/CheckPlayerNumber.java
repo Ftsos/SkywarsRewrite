@@ -20,13 +20,17 @@ public class CheckPlayerNumber extends BukkitRunnable {
         if(this.game.getPlayers().size() <= 1){
            // this.game.setState(GameDefinition.GameState.ENDING);
            // if(this.gamePlayes)
-            if(this.game.getWinner() != null) {
+            try {
+            if(this.game.getWinner() != null && this.game.isState(GameDefinition.GameState.ENDING)) {
                 this.game.finishGame(this.game.getWinner());
                 cancel(); 
             } else {
                 cancel();
             }
             //this.game.getPlayers().clear();
+            } catch (Exception ex) {
+                cancel();
+            }
         } else {
             cancel();
         }

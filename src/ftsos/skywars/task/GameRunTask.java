@@ -1,6 +1,7 @@
 package ftsos.skywars.task;
 
 import ftsos.skywars.objects.GameDefinition;
+import ftsos.skywars.scoreboard.ScoreboardSkywars;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,6 +22,7 @@ public class GameRunTask extends BukkitRunnable {
         if (startInt <= 1) {
             this.cancel();
             this.game.setState(GameDefinition.GameState.ACTIVE);
+            this.game.setScoreboard(new ScoreboardSkywars(game));
             this.game.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] El juego ha comenzado");
             this.game.setMovementFrozen(false);
         } else {

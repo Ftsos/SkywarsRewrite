@@ -1,10 +1,13 @@
 package ftsos.skywars.objects;
 
+import com.sun.istack.internal.NotNull;
 import ftsos.skywars.RollbackHandler;
 import ftsos.skywars.Skywars;
+import ftsos.skywars.scoreboard.ScoreboardSkywars;
 import ftsos.skywars.task.CheckPlayerNumber;
 import ftsos.skywars.task.GameCountDownTask;
 import ftsos.skywars.task.PlayersRealTime;
+import ftsos.skywars.task.ScoreboardTaskStuff;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Chest;
@@ -38,9 +41,12 @@ public class GameDefinition {
     private Set<Chest> opened;
     private Set<Chest> toFill;
 
-    private int seconds;
-    private int minutes;
-    private String time;
+    private int seconds = 0;
+    private int minutes = 0;
+    private String time = "";
+
+    private ScoreboardSkywars scoreboard;
+    private ArrayList<String> scoreboardTexts;
 
     private World worldBeforeSave;
     private boolean movementFrozen = false;
@@ -68,6 +74,7 @@ public class GameDefinition {
 
         try {
             String[] values = config.getString("mapas." + gameName + ".lobbyPoint").split(",");
+
             double x = Double.parseDouble(values[0]); // X:0 -> X, 0 -> 0
             double y = Double.parseDouble(values[1]);
             double z = Double.parseDouble(values[2]);
@@ -76,7 +83,7 @@ public class GameDefinition {
             Skywars.getInstance().getLogger().severe(ChatColor.BOLD + "" + ChatColor.YELLOW +"Hubo un error con el lobby con metadata: " + gameName + ex);
         }
         this.spawnPoints = new ArrayList<>();
-
+        this.scoreboardTexts = new ArrayList<String>();
         for (String point : config.getStringList("mapas." + gameName + ".spawns")) {
             try {
                 String[] values = point.split(","); // [X:0, Y:0, Z:0]
@@ -185,6 +192,7 @@ public class GameDefinition {
         this.spectators = new HashSet<>();
 
         //voy a anadir lo de los cofres
+        this.toFill = new HashSet<Chest>();
 
         for (String chestLocationString : config.getStringList("mapas." + gameName + ".chests")){
             try {
@@ -280,6 +288,43 @@ public class GameDefinition {
         new GameCountDownTask(this).runTaskTimer(Skywars.getInstance(), 0, 20);
     }
 
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public ScoreboardSkywars getScoreboard() {
+        return scoreboard;
+    }
+
+    public void setScoreboard(ScoreboardSkywars scoreboard) {
+        this.scoreboard = scoreboard;
+        startTimer();
+    }
+
+    public void startTimer(){
+        new ScoreboardTaskStuff(this).runTaskTimer(Skywars.getInstance(), 0, 20);
+    }
+
     public void assignSpawnPositions() {
         int id = 0;
         for (GamePlayer gamePlayer : getPlayers()) {
@@ -295,12 +340,15 @@ public class GameDefinition {
         }
     }
 
-    public void finishGame(GamePlayer winner) {
+    @NotNull public void finishGame(GamePlayer winner) {
         if(this.gameState == GameState.ENDING){
             //todx change the winner for each player
             this.getSpectators().forEach((GamePlayer spectator) -> {
                 spectator.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "La partida ha finalizado", winner.getName() + " Gano esta partida", 10, 10, 10);
             });
+            /*this.getPla().forEach((GamePlayer spectator) -> {
+                spectator.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "La partida ha finalizado", winner.getName() + " Gano esta partida", 10, 10, 10);
+            });*/
             winner.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "Ganaste!", winner.getName() + " Gano esta partida", 10, 10, 10);
 
             this.players.forEach((GamePlayer gamePlayer) -> {
@@ -308,21 +356,36 @@ public class GameDefinition {
                 gamePlayer.getPlayer().teleport(Skywars.getInstance().getLobbyPoint());
                     //todx Change the time to 10 segs and reset to pass the world
                 gamePlayer.getPlayer().sendTitle("", "", 0,0,0);
+                    gamePlayer.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Tu partida de Skywars ha terminado");
+                    gamePlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
+                    gamePlayer.getPlayer().getInventory().setArmorContents(null);
+                    gamePlayer.getPlayer().getInventory().clear();
+                    gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                    gamePlayer.getPlayer().teleport(Skywars.getInstance().getLobbyPoint());
                 } else {
                     gamePlayer.getPlayer().setHealth(0);
                     Skywars.getInstance().getLogger().severe(ChatColor.BOLD + "" + ChatColor.YELLOW + "Error con el lobby point ya que no existe (o probablemente es null)");
                 }
             });
+
+
             sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Tu partida de Skywars ha terminado");
             //getPlayers().get(getPlayers().indexOf(winner));
             getSpectators().forEach((GamePlayer spectator) -> {
                 spectator.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Tu partida de Skywars ha terminado");
                 spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
+                spectator.getPlayer().getInventory().setArmorContents(null);
+                spectator.getPlayer().getInventory().clear();
+                spectator.getPlayer().setHealth(spectator.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                spectator.getPlayer().teleport(Skywars.getInstance().getLobbyPoint());
             });
+            this.getScoreboard().removeScoreboard();
             this.spectators.clear();
             this.players.clear();
            // `Rollback`Handler.getRollbackHandler().rollback(world);
             //plugin.games.remove(this);
+
+            this.scoreboard = null;
             Skywars.getInstance().finishGame(this);
         }
     }
@@ -332,7 +395,7 @@ public class GameDefinition {
 
         player.setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
         player.setGameMode(GameMode.SPECTATOR);
-
+        this.scoreboard.removeScoreboardToPlayer(gamePlayer);
         if (gamePlayer != null) {
             switchToSpectator(gamePlayer);
         }
@@ -397,12 +460,14 @@ public class GameDefinition {
         
         spectator.getPlayer().teleport(lobbyPoint);
         spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
+        this.scoreboard.removeScoreboardToPlayer(spectator);
         }
         if(players.contains(spectator)){
 
-            players.remove(spectator);
-            spectator.getPlayer().teleport(lobbyPoint);
-            spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
+        players.remove(spectator);
+        spectator.getPlayer().teleport(lobbyPoint);
+        spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
+        this.scoreboard.removeScoreboardToPlayer(spectator);
 
         }
     }
@@ -439,11 +504,11 @@ public class GameDefinition {
         return normalItems;
     }
     public void setWinner(GamePlayer gamePlayer) {
-        winner = gamePlayer;
+        this.winner = gamePlayer;
     }
 
     public GamePlayer getWinner(){
-        return winner;
+        return this.winner;
     }
     public enum GameState {
         LOBBY, STARTING, PREPARATION, ACTIVE, ENDING

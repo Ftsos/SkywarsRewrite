@@ -2,6 +2,7 @@ package ftsos.skywars.listeners;
 
 import ftsos.skywars.Skywars;
 import ftsos.skywars.objects.GameDefinition;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -20,8 +20,9 @@ public class PlayerDie implements Listener {
     @EventHandler
     public void onPlayerDie(PlayerDeathEvent e){
         Player playerDied = (Player) e.getEntity();
+
         if(playerDied != null && Skywars.getInstance().getGame(playerDied) != null && Skywars.getInstance().getGame(playerDied).getGameState() == GameDefinition.GameState.ACTIVE){
-            //todo tengo q hacer lo de corroborar si se encuentra en alguna partida
+            //done tengo q hacer lo de corroborar si se encuentra en alguna partida
 
             GameDefinition game = Skywars.getInstance().getGame(playerDied);
 

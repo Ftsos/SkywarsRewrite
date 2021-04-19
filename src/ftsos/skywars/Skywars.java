@@ -46,10 +46,12 @@ public class Skywars extends JavaPlugin {
 				boolean status = this.registerGame(game);
 			}
 		}
+
+
 	}
 
 	public void onDisable() {
-		//todo
+
 		for (Map.Entry<Player, GameDefinition> entry : playerGameMap.entrySet()) {
 			entry.getKey().teleport(getLobbyPoint());
 			entry.getKey().getInventory().clear();
@@ -63,8 +65,12 @@ public class Skywars extends JavaPlugin {
 				for (Player player : game.getWorld().getPlayers()) {
 					player.teleport(getLobbyPoint());
 				}
+				String rootDirectory = getServer().getWorldContainer().getAbsolutePath();
+				File destFolder = new File(rootDirectory + "/" + game.getWorld().getName() + "_active");
 
-				RollbackHandler.getRollbackHandler().rollback(game.getWorld());
+				getServer().unloadWorld(game.getWorld(), false);
+
+				RollbackHandler.getRollbackHandler().delete(destFolder);
 			}
 
 			instance = null;
@@ -85,6 +91,7 @@ public class Skywars extends JavaPlugin {
 	}
 
 	private Location lobbyPoint = null;
+
 
 	public Location getLobbyPoint() {
 		if (lobbyPoint == null) {
@@ -147,6 +154,7 @@ public class Skywars extends JavaPlugin {
 
 	public void finishGame(GameDefinition game) {
 		if(game != null){
+			games.remove(game);
 			game.getPlayers().forEach((GamePlayer gamePlayer) -> {
 				gamePlayer.getPlayer().getInventory().clear();
 				gamePlayer.getPlayer().getInventory().setArmorContents(null);
@@ -156,11 +164,11 @@ public class Skywars extends JavaPlugin {
 			String worldName = game.getWorld().getName();
 
 			String rootDirectory = Skywars.getInstance().getServer().getWorldContainer().getAbsolutePath();
-
+			getServer().unloadWorld(game.getWorld(), false);
 			File destFolder = new File(rootDirectory + "/" + worldName + "_active");
 			RollbackHandler.getRollbackHandler().delete(destFolder);
 
-			games.remove(game);
+
 
 			restartGame(game);
 		}
