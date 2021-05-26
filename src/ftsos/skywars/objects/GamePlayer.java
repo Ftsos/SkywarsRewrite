@@ -1,8 +1,11 @@
 package ftsos.skywars.objects;
 
+import ftsos.skywars.cage.Cage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class GamePlayer {
 
@@ -35,7 +38,7 @@ public class GamePlayer {
         if (isTeamClass()) {
             getTeam().sendMessage(message);
         } else {
-            //todo
+            //done
             //revisa el ChatUtils xD
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
@@ -63,5 +66,9 @@ public class GamePlayer {
 
     public enum GamePlayerState {
 
+    }
+
+    public Cage selectedCage(){
+        return new Cage
     }
 }

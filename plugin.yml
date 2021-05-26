@@ -5,3 +5,5 @@ commands:
   skywars:
     description: A normal Skywars Command /sw help for help
     aliases: sw
+depend:
+  - WorldEdit

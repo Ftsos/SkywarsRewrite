@@ -1,7 +1,11 @@
 package ftsos.skywars.task;
 
+import ftsos.skywars.Skywars;
 import ftsos.skywars.objects.GameDefinition;
+import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
 
 public class ScoreboardTaskStuff extends BukkitRunnable {
 
@@ -45,8 +49,20 @@ public class ScoreboardTaskStuff extends BukkitRunnable {
         game.setMinutes(minutes);
         game.setSeconds(seconds);
         game.setTime(time);
-
-        game.getScoreboard().updateTimeScoreboard();
+        ArrayList<String> scoreboardText = new ArrayList<String>();
+        scoreboardText.add(" ");
+        scoreboardText.add("  " + ChatColor.DARK_GREEN + "Time: " + game.getTime() + "  ");
+        scoreboardText.add(" ");
+        scoreboardText.add("  " + ChatColor.DARK_GREEN + "Players: " + game.getPlayers().size() + "  ");
+        scoreboardText.add("  ");
+        //todo Scoreboard its backwards start from the last line (ServerIp) and Finish in time xD
+        if(Skywars.getInstance().getConfig().contains("serverIp")){
+        scoreboardText.add("  " + ChatColor.translateAlternateColorCodes('&', Skywars.getInstance().getConfig().getString("serverIp")) + "  ");
+        } else {
+            scoreboardText.add("  " + ChatColor.AQUA + "ftsosserver.com" +  "  ");
+        }
+        game.setScoreboardTexts(scoreboardText);
+        game.getScoreboard().updateScoreboard();
 
     } else {
            cancel();

@@ -11,10 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class ChestOpen implements Listener {
     @EventHandler
@@ -115,7 +112,7 @@ public class ChestOpen implements Listener {
         Inventory inventory = chest.getBlockInventory();
         int added = 0;
 
-        for (ChestItem chestItem : chestItemList) {
+      /*  for (ChestItem chestItem : chestItemList) {
             if (new Random().nextInt(99) + 1 <= chestItem.getChance()) {
                 inventory.addItem(chestItem.getItem());
 
@@ -123,7 +120,100 @@ public class ChestOpen implements Listener {
                     break;
                 }
             }
+        }*/
+        //done reDo Chest Generation
+        int numberLine1 = new Random().nextInt(1) + 2;
+        int numberLine2 = new Random().nextInt(1) + 2;
+        int numberLine3 = new Random().nextInt(1) + 2;
+        List<Integer> numbersOfLine1 = new ArrayList<Integer>();
+        List<Integer> numbersOfLine2 = new ArrayList<Integer>();
+        List<Integer> numbersOfLine3 = new ArrayList<Integer>();
+        /*
+         Vamos a generar un numero q sea entre 2 veces y 3 veces, la cantidad d items por fila,
+         despues lo vamos a anadir a un arrayList y si ese numero ya esta ahi lo cambiaremos hasta q ya no este ahi
+         y entoces x cada linea tendremos 2 o 3 numeros aleatorios con posiciones aleatorias del 0 - 8
+         */
+        for (int i = 0; i < numberLine1; i++) {
+           int toAdd = new Random().nextInt(8);
+           while(numbersOfLine1.contains(toAdd)){
+               toAdd = new Random().nextInt(8);
+           }
+
+           numbersOfLine1.add(toAdd);
         }
+
+        for (int i = 0; i < numberLine2; i++) {
+            int toAdd = new Random().nextInt(8);
+            while(numbersOfLine2.contains(toAdd)){
+                toAdd = new Random().nextInt(8);
+            }
+
+            numbersOfLine2.add(toAdd);
+        }
+
+        for (int i = 0; i < numberLine3; i++) {
+            int toAdd = new Random().nextInt(8);
+            while(numbersOfLine3.contains(toAdd)){
+                toAdd = new Random().nextInt(8);
+            }
+
+            numbersOfLine3.add(toAdd);
+        }
+
+
+        HashMap<ChestItem, Integer> chestItemsLine1 = new HashMap<ChestItem, Integer>();
+        numbersOfLine1.forEach((position) -> {
+            for (ChestItem chestItem : chestItemList) {
+                if (new Random().nextInt(99) + 1 <= chestItem.getChance()) {
+                    chestItemsLine1.put(chestItem, position);
+                }
+
+            }
+
+
+
+        });
+
+        HashMap<ChestItem, Integer> chestItemsLine2 = new HashMap<ChestItem, Integer>();
+        numbersOfLine2.forEach((position) -> {
+            for (ChestItem chestItem : chestItemList) {
+                if (new Random().nextInt(99) + 1 <= chestItem.getChance()) {
+                    chestItemsLine2.put(chestItem, position);
+                }
+
+            }
+
+
+
+        });
+
+        HashMap<ChestItem, Integer> chestItemsLine3 = new HashMap<ChestItem, Integer>();
+        numbersOfLine3.forEach((position) -> {
+            for (ChestItem chestItem : chestItemList) {
+                if (new Random().nextInt(99) + 1 <= chestItem.getChance()) {
+                    chestItemsLine3.put(chestItem, position);
+                }
+
+            }
+
+
+
+        });
+
+        chestItemsLine1.forEach((ChestItem chestItem, Integer position) -> {
+            inventory.setItem(position, chestItem.getItem());
+
+        });
+
+        chestItemsLine2.forEach((ChestItem chestItem, Integer position) -> {
+            inventory.setItem(position + 8, chestItem.getItem());
+
+        });
+
+        chestItemsLine3.forEach((ChestItem chestItem, Integer position) -> {
+            inventory.setItem(position + 16, chestItem.getItem());
+
+        });
     }
 
 

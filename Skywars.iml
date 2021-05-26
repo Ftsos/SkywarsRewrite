@@ -33,5 +33,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="spigot-1.16.5" level="project" />
+    <orderEntry type="library" name="worldedit-bukkit-7.2.3" level="project" />
   </component>
 </module>

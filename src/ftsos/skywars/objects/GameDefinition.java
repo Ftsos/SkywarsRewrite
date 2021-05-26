@@ -14,6 +14,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -47,9 +48,44 @@ public class GameDefinition {
 
     private ScoreboardSkywars scoreboard;
     private ArrayList<String> scoreboardTexts;
+    private String titleScoreboard;
+    private String idScoreboard;
+    private DisplaySlot displaySlot;
 
     private World worldBeforeSave;
     private boolean movementFrozen = false;
+
+    public String getTitleScoreboard() {
+        return titleScoreboard;
+    }
+
+    public void setTitleScoreboard(String titleScoreboard) {
+        this.titleScoreboard = titleScoreboard;
+    }
+
+    public String getIdScoreboard() {
+        return idScoreboard;
+    }
+
+    public void setIdScoreboard(String idScoreboard) {
+        this.idScoreboard = idScoreboard;
+    }
+
+    public DisplaySlot getDisplaySlot() {
+        return displaySlot;
+    }
+
+    public void setDisplaySlot(DisplaySlot displaySlot) {
+        this.displaySlot = displaySlot;
+    }
+
+    public ArrayList<String> getScoreboardTexts() {
+        return scoreboardTexts;
+    }
+
+    public void setScoreboardTexts(ArrayList<String> scoreboardTexts) {
+        this.scoreboardTexts = scoreboardTexts;
+    }
 
     public GameDefinition(String gameName) {
         FileConfiguration config = plugin.getConfig();
@@ -190,7 +226,9 @@ public class GameDefinition {
         this.isTeamGame = Boolean.parseBoolean(config.getString("games." + gameName + ".isTeamGame"));
         this.players = new ArrayList<>();
         this.spectators = new HashSet<>();
-
+        this.idScoreboard = "skywars";
+        this.titleScoreboard = ChatColor.YELLOW + "" + ChatColor.BOLD + "  Skywars  ";
+        this.displaySlot = DisplaySlot.SIDEBAR;
         //voy a anadir lo de los cofres
         this.toFill = new HashSet<Chest>();
 

@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class ScoreboardSkywars {
     private GameDefinition gameDef;
     private int position = 1;
-    //todo Change the id and all that stuffs xD
-    private String idProp;
+    //done Change the id and all that stuffs xD
+
     public ScoreboardSkywars(GameDefinition game){
         if (game != null){
         gameDef = game;
@@ -26,13 +26,19 @@ public class ScoreboardSkywars {
         /*ArrayList<String> txtScoreBoard = new ArrayList<String>();
         txtScoreBoard.add()
        scoreboardArrayListTextToPlayer();*/
-        scoreboardTimeToPlayer(player, game.getTime(), position);
-    }
+        //scoreboardTimeToPlayer(player, game.getTime(), position);
+        scoreboardArrayListTextToPlayer(gameDef.getScoreboardTexts(),
+                player,
+                gameDef.getTitleScoreboard(),
+                gameDef.getIdScoreboard(),
+                gameDef.getDisplaySlot());
     }
     }
     }
 
+    }
 
+    @Deprecated
     public void scoreboardTimeToPlayer(Player player, String time, int position){
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
@@ -49,6 +55,7 @@ public class ScoreboardSkywars {
         player.setScoreboard(board);
     }
 
+    @Deprecated
     public void updateTimeScoreboard(){
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
@@ -75,14 +82,21 @@ public class ScoreboardSkywars {
 
         Scoreboard board = manager.getNewScoreboard();
 
+        //todo problem of the scoreboard is with this
+        Objective objective = board.registerNewObjective(gameDef.getIdScoreboard(), "dummy", gameDef.getTitleScoreboard());
+        objective.setDisplaySlot(gameDef.getDisplaySlot());
+        objective.setDisplayName(gameDef.getTitleScoreboard());
 
-        Objective objective = board.registerNewObjective("Skywars", "dummy", ChatColor.YELLOW + "Skywars");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.YELLOW + "  Skywars  ");
+        int currentPosition = gameDef.getScoreboardTexts().size();
+        for (String text : gameDef.getScoreboardTexts()) {
+            Score score = objective.getScore(text);
 
-        Score score = objective.getScore(ChatColor.GREEN + "   Time: " + gameDef.getTime() + "  ");
+            score.setScore(currentPosition);
+            currentPosition--;
+        }
+      //  Score score = objective.getScore(ChatColor.GREEN + "   Time: " + gameDef.getTime() + "  ");
 
-        score.setScore(position);
+        //score.setScore(position);
 
         for(GamePlayer gamePlayer : gameDef.getPlayers()) {
             Player player = gamePlayer.getPlayer();
@@ -97,7 +111,7 @@ public class ScoreboardSkywars {
 
         Objective objective = board.registerNewObjective(id, "dummy", title);
         objective.setDisplaySlot(displaySlot);
-        //objective.setDisplayName();
+        objective.setDisplayName();
         int currentPosition = 0;
         for (String text : texts) {
             Score score = objective.getScore(text);
