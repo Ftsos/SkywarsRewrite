@@ -1,11 +1,9 @@
 package ftsos.skywars;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import ftsos.skywars.cage.CageManager;
 import ftsos.skywars.comandos.skywarsCommand;
-import ftsos.skywars.listeners.BlockInteract;
-import ftsos.skywars.listeners.ChestOpen;
-import ftsos.skywars.listeners.PlayerDie;
-import ftsos.skywars.listeners.PlayerMove;
+import ftsos.skywars.listeners.*;
 import ftsos.skywars.objects.GameDefinition;
 import ftsos.skywars.objects.GamePlayer;
 import org.bukkit.Bukkit;
@@ -38,8 +36,7 @@ public class Skywars extends JavaPlugin {
 	private Map<Player, GameDefinition> playerGameMap = new HashMap<>();
 	public Set<GameDefinition> games = new HashSet<>();
 	public WorldEditPlugin worldEditPlugin;
-	public FileConfiguration cages;
-
+	public CageManager cageManager = new CageManager();
 	public void onEnable() {
 		instance = this;
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[" + nombre + "]: " + version + ": " + "Ha Sido Activado");
@@ -104,6 +101,9 @@ public class Skywars extends JavaPlugin {
 		pm.registerEvents(new ChestOpen(), this);
 		pm.registerEvents(new PlayerDie(this), this);
 		pm.registerEvents(new BlockInteract(), this);
+		//todo later XD
+		pm.registerEvents(new PlayerInteract(), this);
+		//pm.registerEvents(new InventoryListener(), this);
 	}
 
 	private Location lobbyPoint = null;
@@ -147,18 +147,7 @@ public class Skywars extends JavaPlugin {
 			saveConfig();
 		}
 
-		File cagesConfig = new File(this.getDataFolder(), "cages.yml");
 
-		if(!cagesConfig.exists()){
-			try {
-				cagesConfig.createNewFile();
-			} catch(Exception ex){
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Skywars]> Failed at create config file" + ex);
-				Bukkit.shutdown();
-			}
-		cages = YamlConfiguration.loadConfiguration(cagesConfig);
-
-		}
 
 	}
 
@@ -226,8 +215,5 @@ public class Skywars extends JavaPlugin {
 		return true;
 	}
 
-	public FileConfiguration getCages() {
-		return cages;
-	}
 }
 

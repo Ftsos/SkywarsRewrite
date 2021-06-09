@@ -18,6 +18,7 @@ public class PlayerMove implements Listener {
             if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()){
                 player.teleport(e.getFrom());
                 e.setCancelled(true);
+
             }
         }
     }
