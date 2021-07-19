@@ -44,8 +44,8 @@ public class ScoreboardSkywars {
 
         Scoreboard board = manager.getNewScoreboard();
 
-
-        Objective objective = board.registerNewObjective("Skywars", "dummy", ChatColor.YELLOW + "Skywars");
+        //todo erroe  No such method
+        Objective objective = board.registerNewObjective(ChatColor.YELLOW + "Skywars", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(ChatColor.YELLOW + "Skywars");
 
@@ -62,7 +62,7 @@ public class ScoreboardSkywars {
         Scoreboard board = manager.getNewScoreboard();
 
 
-        Objective objective = board.registerNewObjective("Skywars", "dummy", ChatColor.YELLOW + "Skywars");
+        Objective objective = board.registerNewObjective(ChatColor.YELLOW + "Skywars", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(ChatColor.YELLOW + "  Skywars  ");
 
@@ -83,7 +83,7 @@ public class ScoreboardSkywars {
         Scoreboard board = manager.getNewScoreboard();
 
         //todo problem of the scoreboard is with this
-        Objective objective = board.registerNewObjective(gameDef.getIdScoreboard(), "dummy", gameDef.getTitleScoreboard());
+        Objective objective = board.registerNewObjective(gameDef.getTitleScoreboard(), "dummy");
         objective.setDisplaySlot(gameDef.getDisplaySlot());
         objective.setDisplayName(gameDef.getTitleScoreboard());
 
@@ -164,7 +164,7 @@ public class ScoreboardSkywars {
         Scoreboard board = manager.getNewScoreboard();
 
 
-        Objective objective = board.registerNewObjective(id, "dummy", title);
+        Objective objective = board.registerNewObjective(title, "dummy");
         objective.setDisplaySlot(displaySlot);
         //objective.setDisplayName();
         int currentPosition = 0;

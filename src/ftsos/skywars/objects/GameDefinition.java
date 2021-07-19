@@ -9,7 +9,6 @@ import ftsos.skywars.task.GameCountDownTask;
 import ftsos.skywars.task.PlayersRealTime;
 import ftsos.skywars.task.ScoreboardTaskStuff;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -177,9 +176,15 @@ public class GameDefinition {
                     min = 1;
                     max = 1;
                 }
-                count = ThreadLocalRandom.current().nextInt(min, max);
+                if(max > min)
+                {
+                    count = ThreadLocalRandom.current().nextInt(min, max);
+                } else {
+                    count = max;
+                }
                 this.normalItems.add(new ItemStack(material, count));
             } catch (Exception ex) {
+                ex.printStackTrace();
                 Skywars.getInstance().getLogger().severe(ChatColor.BOLD + "" + ChatColor.YELLOW + gameName + ": ese item " + item + " no existe xD");
             }
         }
@@ -216,7 +221,12 @@ public class GameDefinition {
                     min = 1;
                     max = 1;
                 }
-                count = ThreadLocalRandom.current().nextInt(min, max);
+                if(max > min)
+                {
+                    count = ThreadLocalRandom.current().nextInt(min, max);
+                } else {
+                    count = max;
+                }
                 this.rareItems.add(new ItemStack(material, count));
             } catch (Exception ex) {
                 Skywars.getInstance().getLogger().severe(ChatColor.BOLD + "" + ChatColor.YELLOW + gameName + ": ese item " + item + " no existe xD");
@@ -269,7 +279,7 @@ public class GameDefinition {
             gamePlayer.getPlayer().getInventory().clear();
             gamePlayer.getPlayer().getInventory().setArmorContents(null);
             gamePlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
-            gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+            gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());
 
             if (getPlayers().size() >= getMinPlayers() && !isState(GameState.STARTING)) {
                 setState(GameState.STARTING);
@@ -371,7 +381,7 @@ public class GameDefinition {
                 gamePlayer.teleport(spawnPoints.get(id));
                 id += 1;
                 gamePlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
-                gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());
             } catch (IndexOutOfBoundsException ex) {
                 Skywars.getInstance().getLogger().severe(ChatColor.BOLD + "" + ChatColor.YELLOW + "No hay Suficientes Spawns para la cantidad maxima de jugadores GEEEENIO (El juego es " + getDisplayName() + ")" + ex);
             }
@@ -382,23 +392,23 @@ public class GameDefinition {
         if(this.gameState == GameState.ENDING){
             //todx change the winner for each player
             this.getSpectators().forEach((GamePlayer spectator) -> {
-                spectator.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "La partida ha finalizado", winner.getName() + " Gano esta partida", 10, 10, 10);
+                spectator.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "La partida ha finalizado", winner.getName() + " Gano esta partida");
             });
             /*this.getPla().forEach((GamePlayer spectator) -> {
                 spectator.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "La partida ha finalizado", winner.getName() + " Gano esta partida", 10, 10, 10);
             });*/
-            winner.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "Ganaste!", winner.getName() + " Gano esta partida", 10, 10, 10);
+            winner.getPlayer().sendTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "Ganaste!", winner.getName() + " Gano esta partida");
 
             this.players.forEach((GamePlayer gamePlayer) -> {
                 if(Skywars.getInstance().getLobbyPoint() != null){
                 gamePlayer.getPlayer().teleport(Skywars.getInstance().getLobbyPoint());
                     //todx Change the time to 10 segs and reset to pass the world
-                gamePlayer.getPlayer().sendTitle("", "", 0,0,0);
+                gamePlayer.getPlayer().resetTitle();
                     gamePlayer.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Tu partida de Skywars ha terminado");
                     gamePlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
                     gamePlayer.getPlayer().getInventory().setArmorContents(null);
                     gamePlayer.getPlayer().getInventory().clear();
-                    gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                    gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());
                     gamePlayer.getPlayer().teleport(Skywars.getInstance().getLobbyPoint());
                 } else {
                     gamePlayer.getPlayer().setHealth(0);
@@ -414,7 +424,7 @@ public class GameDefinition {
                 spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
                 spectator.getPlayer().getInventory().setArmorContents(null);
                 spectator.getPlayer().getInventory().clear();
-                spectator.getPlayer().setHealth(spectator.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                spectator.getPlayer().setHealth(spectator.getPlayer().getMaxHealth());
                 spectator.getPlayer().teleport(Skywars.getInstance().getLobbyPoint());
             });
             this.getScoreboard().removeScoreboard();
@@ -431,7 +441,7 @@ public class GameDefinition {
     public void activateSpectatorSettings(Player player) {
         GamePlayer gamePlayer = getGamePlayer(player);
 
-        player.setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+        player.setHealth(gamePlayer.getPlayer().getMaxHealth());
         player.setGameMode(GameMode.SPECTATOR);
         this.scoreboard.removeScoreboardToPlayer(gamePlayer);
         if (gamePlayer != null) {
@@ -505,7 +515,9 @@ public class GameDefinition {
         players.remove(spectator);
         spectator.getPlayer().teleport(lobbyPoint);
         spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
+        if(this.scoreboard != null){
         this.scoreboard.removeScoreboardToPlayer(spectator);
+        }
 
         }
     }

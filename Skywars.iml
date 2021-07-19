@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
-    <libelement value="jar://$USER_HOME$/Downloads/spigot-1.16.5.jar!/" />
+
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="1" />
     </src_description>
@@ -23,16 +23,8 @@
     </content>
     <orderEntry type="jdk" jdkName="JavaSE-1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="spigot-1.16.5.jar">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/spigot-1.16.5.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="spigot-1.16.5" level="project" />
-    <orderEntry type="library" name="worldedit-bukkit-7.2.3" level="project" />
+
+    <orderEntry type="library" name="spigot-1.8.8" level="project" />
+    <orderEntry type="library" name="worldedit-bukkit-6.1" level="project" />
   </component>
 </module>

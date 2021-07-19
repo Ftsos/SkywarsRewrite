@@ -1,19 +1,21 @@
 package ftsos.skywars;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import ftsos.skywars.admin.AdminGuiManager;
+import ftsos.skywars.admin.AdminKitGiveCommand;
 import ftsos.skywars.cage.CageManager;
 import ftsos.skywars.comandos.skywarsCommand;
 import ftsos.skywars.listeners.*;
 import ftsos.skywars.objects.GameDefinition;
 import ftsos.skywars.objects.GamePlayer;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -36,7 +38,8 @@ public class Skywars extends JavaPlugin {
 	private Map<Player, GameDefinition> playerGameMap = new HashMap<>();
 	public Set<GameDefinition> games = new HashSet<>();
 	public WorldEditPlugin worldEditPlugin;
-	public CageManager cageManager = new CageManager();
+	public CageManager cageManager;
+	public AdminGuiManager adminGuiManager;
 	public void onEnable() {
 		instance = this;
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[" + nombre + "]: " + version + ": " + "Ha Sido Activado");
@@ -56,6 +59,8 @@ public class Skywars extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El plugin No se pudo activar por que world edit no esta activado");
 		}
 
+		cageManager = new CageManager();
+		this.adminGuiManager = new AdminGuiManager();
 	}
 
 	public void onDisable() {
@@ -65,7 +70,7 @@ public class Skywars extends JavaPlugin {
 			entry.getKey().teleport(getLobbyPoint());
 			entry.getKey().getInventory().clear();
 			entry.getKey().getInventory().setArmorContents(null);
-			entry.getKey().setHealth(entry.getKey().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+			entry.getKey().setHealth(entry.getKey().getMaxHealth());
 			entry.getKey().setGameMode(GameMode.SURVIVAL);
 			for (Player player : getServer().getOnlinePlayers()) {
 				player.teleport(getLobbyPoint());
@@ -93,6 +98,7 @@ public class Skywars extends JavaPlugin {
 
 	public void registerCommands() {
 		this.getCommand("skywars").setExecutor(new skywarsCommand(this));
+		this.getCommand("swadminkit").setExecutor(new AdminKitGiveCommand(this));
 	}
 
 	public void registerEvents() {
@@ -103,7 +109,7 @@ public class Skywars extends JavaPlugin {
 		pm.registerEvents(new BlockInteract(), this);
 		//todo later XD
 		pm.registerEvents(new PlayerInteract(), this);
-		//pm.registerEvents(new InventoryListener(), this);
+		pm.registerEvents(new InventoryListener(), this);
 	}
 
 	private Location lobbyPoint = null;
@@ -177,7 +183,7 @@ public class Skywars extends JavaPlugin {
 			game.getPlayers().forEach((GamePlayer gamePlayer) -> {
 				gamePlayer.getPlayer().getInventory().clear();
 				gamePlayer.getPlayer().getInventory().setArmorContents(null);
-				gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+				gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());
 				gamePlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
 			});
 			String worldName = game.getWorld().getName();

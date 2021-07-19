@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="Skywars1">
-    <output-path>$USER_HOME$/Prueba Skywars/plugins</output-path>
+    <output-path>$PROJECT_DIR$/../SwTestServer1.8/plugins</output-path>
     <root id="archive" name="Skywars1.jar">
       <element id="module-output" name="Skywars" />
       <element id="file-copy" path="$PROJECT_DIR$/config.yml" />

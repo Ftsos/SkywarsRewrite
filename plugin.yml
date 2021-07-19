@@ -5,5 +5,7 @@ commands:
   skywars:
     description: A normal Skywars Command /sw help for help
     aliases: sw
+  swadminkit:
+      description: an admin kitsw command
 depend:
   - WorldEdit
