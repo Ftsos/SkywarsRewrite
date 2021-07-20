@@ -24,6 +24,7 @@ public class PlayerInteract implements Listener {
         Player player = event.getPlayer();
         Action action = event.getAction();
         ItemStack item = player.getItemInHand();
+        Skywars.getInstance().eventHandler.handle(event);
         if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
          //   Skywars.getInstance().getServer().getLogger().info("Skywars> Right Click");
             //xd
@@ -44,26 +45,7 @@ public class PlayerInteract implements Listener {
                }
             }
 
-            if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(ChatColor.RED + "Select Chest") && item.getType() == Material.BLAZE_ROD) {
 
-                //Set Chest
-                String mapName = Skywars.getInstance().adminGuiManager.getMap();
-                FileConfiguration config = Skywars.getInstance().getConfig();
-                if(mapName != null){
-               // config.set("mapas." + mapName + ".chests", p);
-                    if(config.contains("mapas." + mapName + ".chests")){
-                        List<String> maps = config.getStringList("mapas." + mapName + ".chests");
-                        maps.add(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
-                        config.set("mapas." + mapName + ".chests", maps);
-                    } else {
-                        List<String> mapsNew = new ArrayList<String>();
-                        mapsNew.add(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
-                        config.set("mapas." + mapName + ".chests", mapsNew);
-                    }
-                } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSkywars> &8Epaaaaaa, primero debes hacer /swadminkit <MapName>"));
-                }
-            }
         }
     }
 }

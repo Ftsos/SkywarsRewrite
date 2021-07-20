@@ -30,11 +30,22 @@ public class AdminKitGiveCommand implements CommandExecutor {
                 if(args.length != 0) {
                     //give kit
                     player.setGameMode(GameMode.CREATIVE);
+
+                    //SelectChest
                     ItemStack blazeChestRod = new ItemStack(Material.BLAZE_ROD, 1);
                     ItemMeta metaBlazeChestRod = blazeChestRod.getItemMeta();
                     metaBlazeChestRod.setDisplayName(ChatColor.RED + "Select Chest");
                     blazeChestRod.setItemMeta(metaBlazeChestRod);
                     player.getInventory().addItem(blazeChestRod);
+
+                    //SetMap
+                    ItemStack setMapBook = new ItemStack(Material.BOOK, 1);
+                    ItemMeta metaSetMapBook = setMapBook.getItemMeta();
+                    metaSetMapBook.setDisplayName(ChatColor.YELLOW + "Set Map");
+                    setMapBook.setItemMeta(metaSetMapBook);
+                    player.getInventory().addItem(setMapBook);
+
+
                     player.sendMessage(ChatColor.YELLOW + "Skywars> " + ChatColor.RESET + "Given a admin kit");
 
                     //set map name

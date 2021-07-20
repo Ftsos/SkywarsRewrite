@@ -3,9 +3,11 @@ package ftsos.skywars;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import ftsos.skywars.admin.AdminGuiManager;
 import ftsos.skywars.admin.AdminKitGiveCommand;
+import ftsos.skywars.admin.AdminKitListener;
 import ftsos.skywars.cage.CageManager;
 import ftsos.skywars.comandos.skywarsCommand;
 import ftsos.skywars.listeners.*;
+import ftsos.skywars.listeners.EventListener;
 import ftsos.skywars.objects.GameDefinition;
 import ftsos.skywars.objects.GamePlayer;
 import org.apache.commons.io.FileUtils;
@@ -23,10 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class Skywars extends JavaPlugin {
@@ -40,6 +39,7 @@ public class Skywars extends JavaPlugin {
 	public WorldEditPlugin worldEditPlugin;
 	public CageManager cageManager;
 	public AdminGuiManager adminGuiManager;
+	public EventHandler eventHandler;
 	public void onEnable() {
 		instance = this;
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[" + nombre + "]: " + version + ": " + "Ha Sido Activado");
@@ -59,8 +59,11 @@ public class Skywars extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El plugin No se pudo activar por que world edit no esta activado");
 		}
 
-		cageManager = new CageManager();
+		this.cageManager = new CageManager();
 		this.adminGuiManager = new AdminGuiManager();
+		List<EventListener> listeners = new ArrayList<EventListener>();
+		listeners.add(new AdminKitListener());
+		this.eventHandler = new EventHandler(listeners);
 	}
 
 	public void onDisable() {
