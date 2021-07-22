@@ -45,6 +45,13 @@ public class AdminKitGiveCommand implements CommandExecutor {
                     setMapBook.setItemMeta(metaSetMapBook);
                     player.getInventory().addItem(setMapBook);
 
+                    //SetSpawn
+                    ItemStack setSpawnBed = new ItemStack(Material.BED, 1);
+                    ItemMeta metaSetSpawnBed = setSpawnBed.getItemMeta();
+                    metaSetSpawnBed.setDisplayName(ChatColor.GREEN + "Set Spawn");
+                    setSpawnBed.setItemMeta(metaSetSpawnBed);
+                    player.getInventory().addItem(setSpawnBed);
+
 
                     player.sendMessage(ChatColor.YELLOW + "Skywars> " + ChatColor.RESET + "Given a admin kit");
 

@@ -233,7 +233,7 @@ public class GameDefinition {
             }
         }
 
-        this.isTeamGame = Boolean.parseBoolean(config.getString("games." + gameName + ".isTeamGame"));
+        this.isTeamGame = Boolean.parseBoolean(config.getString("mapas." + gameName + ".isTeamGame"));
         this.players = new ArrayList<>();
         this.spectators = new HashSet<>();
         this.idScoreboard = "skywars";
