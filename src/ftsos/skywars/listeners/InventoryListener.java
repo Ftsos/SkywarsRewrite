@@ -2,6 +2,7 @@ package ftsos.skywars.listeners;
 
 import ftsos.skywars.Skywars;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,9 +28,13 @@ public class InventoryListener implements Listener {
         ItemStack clickedItem = e.getCurrentItem();
 
         // verify current item is not null
-        if (clickedItem == null ) return;
+        if (clickedItem == null) return;
 
+        if(clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName() && clickedItem.getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', "&cClose"))){
+            p.closeInventory();
+        }
 
+        Skywars.getInstance().eventHandler.handle(e);
 
         // Using slots click is a best option for your inventory click's
         //p.sendMessage("You clicked at slot " + e.getRawSlot());

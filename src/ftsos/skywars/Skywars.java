@@ -113,6 +113,7 @@ public class Skywars extends JavaPlugin {
 		//todo later XD
 		pm.registerEvents(new PlayerInteract(), this);
 		pm.registerEvents(new InventoryListener(), this);
+		pm.registerEvents(new PlayerHit(), this);
 	}
 
 	private Location lobbyPoint = null;

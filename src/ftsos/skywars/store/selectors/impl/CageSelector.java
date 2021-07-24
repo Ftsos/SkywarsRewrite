@@ -7,6 +7,7 @@ import ftsos.skywars.objects.GamePlayer;
 import ftsos.skywars.store.itemShop.ItemShop;
 import ftsos.skywars.store.selectors.Selector;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +39,9 @@ public class CageSelector extends Selector {
             meta.setDisplayName(cages.get(i).name);
             inv.setItem(i, item);
         }
+        ItemStack closeStainedRedClay = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
+        ItemMeta metaCloseStainedRedClay = closeStainedRedClay.getItemMeta();
+        metaCloseStainedRedClay.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cClose"));
         inv.setItem(53, new ItemStack(Material.STAINED_CLAY, 1, (short) 14));
         this.player.getPlayer().openInventory(inv);
         this.cageManager.invList.put(player.getPlayer().getUniqueId(), inv);

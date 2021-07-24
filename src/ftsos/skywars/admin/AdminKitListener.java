@@ -9,9 +9,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,10 @@ public class AdminKitListener extends EventListener {
             setSpawn(event, player, action, item);
             setItems(event, player, action, item);
 
+        }
+        if(event2 instanceof InventoryClickEvent){
+            InventoryClickEvent event = (InventoryClickEvent) event2;
+            handleInventoryClick(event);
         }
     }
 
@@ -110,14 +116,43 @@ public class AdminKitListener extends EventListener {
     }
 
     public void setItems(PlayerInteractEvent event, Player player, Action action, ItemStack item){
-        //TODO
+
         if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
-                if (item.getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Set Normal Items Chest") && item.getType() == Material.BOOKSHELF){
+                if (item.getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Set Normal Items Chest") && item.getType() == Material.BOOKSHELF) {
                     Inventory inventory = Bukkit.createInventory(null, 54, "Items");
-                    player.openInventory(inventory);
+                    //inventory.addItem()
+                    FileConfiguration config = Skywars.getInstance().getConfig();
+                    String mapName = Skywars.getInstance().adminGuiManager.getMap();
+                    if (mapName != null) {
+
+                        if(config.contains("mapas." + Skywars.getInstance().adminGuiManager.getMap() + ".normalItems") && !config.getStringList("mapas." + Skywars.getInstance().adminGuiManager.getMap() + ".normalItems").isEmpty()) {
+
+                            for (String itemString : config.getStringList("mapas." + Skywars.getInstance().adminGuiManager.getMap() + ".normalItems")) {
+                                try {
+                                    ItemStack itemToAdd = new ItemStack(Material.valueOf(itemString));
+                                    ItemMeta metaItemToAdd = itemToAdd.getItemMeta();
+                                    metaItemToAdd.setDisplayName(ChatColor.YELLOW + "Item> " + itemToAdd.getType().name());
+                                    inventory.addItem();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        } else {
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&ESkywars> &8No hay ningun item, :C, pero igual puedes anadir uno :)"));
+                        }
+                        player.openInventory(inventory);
+
+
+                    } else {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSkywars> &8Epaaaaaa, primero debes hacer /swadminkit <MapName>"));
+                    }
                 }
             }
         }
+    }
+
+    public void handleInventoryClick(InventoryClickEvent event){
+        //TODO
     }
 }
