@@ -42,7 +42,8 @@ public class CageSelector extends Selector {
         ItemStack closeStainedRedClay = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
         ItemMeta metaCloseStainedRedClay = closeStainedRedClay.getItemMeta();
         metaCloseStainedRedClay.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cClose"));
-        inv.setItem(53, new ItemStack(Material.STAINED_CLAY, 1, (short) 14));
+        closeStainedRedClay.setItemMeta(metaCloseStainedRedClay);
+        inv.setItem(53, closeStainedRedClay);
         this.player.getPlayer().openInventory(inv);
         this.cageManager.invList.put(player.getPlayer().getUniqueId(), inv);
 

@@ -23,7 +23,7 @@ public class PlayersRealTime extends BukkitRunnable {
             try{
             game.setState(GameDefinition.GameState.ENDING);
             this.game.setWinner(this.game.getPlayers().get(0));
-            new CheckPlayerNumber(game).runTaskTimer(Skywars.getInstance(), 0, 200);
+            //new CheckPlayerNumber(game).runTaskTimer(Skywars.getInstance(), 0, 200);
             cancel();
             } catch (IndexOutOfBoundsException ingnored) {
 

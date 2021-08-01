@@ -193,7 +193,7 @@ public class skywarsCommand implements CommandExecutor {
                 if(plugin.getGame(player) != null){
                     GameDefinition game = plugin.getGame(player);
                     GamePlayer gamePlayer = game.getGamePlayer(player);
-                    game.spectatorLeave(gamePlayer);
+                    game.leave(gamePlayer);
                     player.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Saliste de tu partida Correctamente");
                 }else{
                     player.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] No te encuetras en ninguna partida");

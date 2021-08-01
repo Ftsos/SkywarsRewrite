@@ -44,6 +44,8 @@ public class GameRunTask extends BukkitRunnable {
             item.setItemMeta(meta);
             player.getInventory().setItem(1, item);
         }
+
+        new VoidKill(this.game).runTaskTimer(Skywars.getInstance(), 0, 5);
     }
 
     public void run() {

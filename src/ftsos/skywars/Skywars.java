@@ -114,6 +114,8 @@ public class Skywars extends JavaPlugin {
 		pm.registerEvents(new PlayerInteract(), this);
 		pm.registerEvents(new InventoryListener(), this);
 		pm.registerEvents(new PlayerHit(), this);
+		pm.registerEvents(new ChangedWorld(), this);
+		pm.registerEvents(new PlayerQuit(), this);
 	}
 
 	private Location lobbyPoint = null;
@@ -190,12 +192,14 @@ public class Skywars extends JavaPlugin {
 				gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());
 				gamePlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
 			});
+			playerGameMap.entrySet().removeIf(entry -> (game.equals(entry.getValue())));
 			String worldName = game.getWorld().getName();
 
 			String rootDirectory = Skywars.getInstance().getServer().getWorldContainer().getAbsolutePath();
 			game.getWorld().getPlayers().forEach((Player player) -> {
 				player.teleport(getLobbyPoint());
 			});
+
 			getServer().unloadWorld(game.getWorld(), false);
 			File destFolder = new File(rootDirectory + "/" + worldName + "_active");
 			RollbackHandler.getRollbackHandler().delete(destFolder);
@@ -223,6 +227,10 @@ public class Skywars extends JavaPlugin {
 	public boolean registerGame(GameDefinition game) {
 		games.add(game);
 		return true;
+	}
+
+	public void removePlayer(Player player) {
+		this.playerGameMap.remove(player);
 	}
 
 }

@@ -30,6 +30,7 @@ public class AdminKitListener extends EventListener {
             setMap(event, player, action, item);
             setSpawn(event, player, action, item);
             setItems(event, player, action, item);
+            saveConfig(event, player, action, item);
 
         }
         if(event2 instanceof InventoryClickEvent){
@@ -98,11 +99,11 @@ public class AdminKitListener extends EventListener {
                     if (mapName != null) {
                         if (config.contains("mapas." + mapName + ".spawns")) {
                             List<String> spawns = config.getStringList("mapas." + mapName + ".spawns");
-                            spawns.add(player.getLocation().getWorld().getName() + "," + event.getClickedBlock().getLocation().getX() + "," + event.getClickedBlock().getLocation().getY() + "," + event.getClickedBlock().getLocation().getZ());
+                            spawns.add(event.getClickedBlock().getLocation().getX() + "," + event.getClickedBlock().getLocation().getY() + "," + event.getClickedBlock().getLocation().getZ());
                             config.set("mapas." + mapName + ".spawns", spawns);
                         } else {
                             List<String> spawns = new ArrayList<String>();
-                            spawns.add(player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
+                            spawns.add(player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
                             config.set("mapas." + mapName + ".spawns", spawns);
                         }
                         event.setCancelled(true);
@@ -154,5 +155,30 @@ public class AdminKitListener extends EventListener {
 
     public void handleInventoryClick(InventoryClickEvent event){
         //TODO
+        Player player = (Player) event.getWhoClicked();
+        Inventory inventory = event.getInventory();
+        if(!inventory.getTitle().equals("Items")) return;
+
+        event.setCancelled(true);
+
+        ItemStack clickedItem = event.getCurrentItem();
+
+        // verify current item is not null
+        if (clickedItem == null) return;
+
+        if(clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName() && clickedItem.getItemMeta().getDisplayName().contains(ChatColor.YELLOW + "Item> ")){
+
+        }
+    }
+
+    public void saveConfig(PlayerInteractEvent event, Player player, Action action, ItemStack item){
+        if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
+                if (item.getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Save") && item.getType() == Material.ENDER_PEARL) {
+                    Skywars.getInstance().saveConfig();
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSkywars> &8Configuracion salvada"));
+                }
+            }
+        }
     }
 }

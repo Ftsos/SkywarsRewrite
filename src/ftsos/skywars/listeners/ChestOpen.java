@@ -206,13 +206,22 @@ public class ChestOpen implements Listener {
         });
 
         chestItemsLine2.forEach((ChestItem chestItem, Integer position) -> {
-            inventory.setItem(position + 8, chestItem.getItem());
+            if(!inventory.contains(chestItem.getItem().getType())){
+                inventory.setItem(position + 8, chestItem.getItem());
+            } else {
+                int number = new Random().nextInt(chestItemList.size() - 1);
+                inventory.setItem(position + 8, chestItemList.get(number).getItem());
+            }
 
         });
 
         chestItemsLine3.forEach((ChestItem chestItem, Integer position) -> {
-            inventory.setItem(position + 16, chestItem.getItem());
-
+            if(!inventory.contains(chestItem.getItem().getType())) {
+                inventory.setItem(position + 16, chestItem.getItem());
+            } else {
+                int number = new Random().nextInt(chestItemList.size() - 1);
+                inventory.setItem(position + 16, chestItemList.get(number).getItem());
+            }
         });
     }
 

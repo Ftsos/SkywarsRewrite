@@ -52,6 +52,12 @@ public class AdminKitGiveCommand implements CommandExecutor {
                     setSpawnBed.setItemMeta(metaSetSpawnBed);
                     player.getInventory().addItem(setSpawnBed);
 
+                    //Save
+                    ItemStack saveEnderPearl = new ItemStack(Material.ENDER_PEARL, 1);
+                    ItemMeta metaSaveEnderPearl = saveEnderPearl.getItemMeta();
+                    metaSaveEnderPearl.setDisplayName(ChatColor.AQUA + "Save");
+                    saveEnderPearl.setItemMeta(metaSaveEnderPearl);
+                    player.getInventory().addItem(saveEnderPearl);
 
                     player.sendMessage(ChatColor.YELLOW + "Skywars> " + ChatColor.RESET + "Given a admin kit");
 
