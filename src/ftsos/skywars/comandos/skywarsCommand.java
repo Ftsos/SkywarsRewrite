@@ -204,13 +204,16 @@ public class skywarsCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] No puedes ejecutar este comando desde la consola");
             }else{
                 Player player = (Player) sender;
-            if(plugin.getGame(args[1]) != null){
+            if(plugin.getGame(args[1]) != null && plugin.getGame(player) == null){
                 GameDefinition game = plugin.getGame(args[1]);
-                GamePlayer gamePlayer = new GamePlayer(player);
-                game.joinGame(gamePlayer);
+                if (game.isState(GameDefinition.GameState.LOBBY) || game.isState(GameDefinition.GameState.STARTING)) {
+                    GamePlayer gamePlayer = new GamePlayer(player);
+                    game.joinGame(gamePlayer);
+                }
+
 
             }else{
-                player.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Este juego no existe o no esta activado");
+                player.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[!] Este juego no existe o no esta activado, o ya estas en uno ;)");
             }
             }
         } else {

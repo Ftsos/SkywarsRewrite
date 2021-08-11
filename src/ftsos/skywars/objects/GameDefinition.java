@@ -414,7 +414,7 @@ public class GameDefinition {
 
                 GamePlayer gamePlayer = this.players.get(id);
                 gamePlayer.teleport(spawnPoints.get(id));
-                Skywars.getInstance().getServer().getLogger().severe(id + " Player " + gamePlayer.getPlayer().getName());
+
 
                 gamePlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
                 gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());

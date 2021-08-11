@@ -4,7 +4,9 @@ import com.sk89q.worldedit.EditSession;
 import ftsos.skywars.Skywars;
 import ftsos.skywars.objects.GameDefinition;
 import ftsos.skywars.objects.GamePlayer;
+import ftsos.skywars.objects.SwPlayer;
 import ftsos.skywars.scoreboard.ScoreboardSkywars;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,8 +32,12 @@ public class GameRunTask extends BukkitRunnable {
         if(!Skywars.getInstance().cageManager.cages.isEmpty()){
             for(GamePlayer player : this.game.getPlayers()){
 
-                EditSession es = Skywars.getInstance().cageManager.cages.get(player.getSelectedCageIndex()).pasteIt(player.getPlayer().getLocation());
-                editSessions.add(es);
+                for (SwPlayer swPlayer : Skywars.getInstance().players){
+                    if(!swPlayer.player.getUniqueId().equals(player.getPlayer().getUniqueId())) continue;
+                    EditSession es = swPlayer.getSelectedCageIndex().pasteIt(player.getPlayer().getLocation());
+                    editSessions.add(es);
+                }
+
             }
         }
 

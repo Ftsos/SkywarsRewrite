@@ -17,21 +17,13 @@ public class GamePlayer {
     private GameTeam team = null;
     private GamePlayerState gamePlayerState;
     private Location spawnPoint;
-    private int cageIndex;
-    public int money = 0;
-    public List<ItemShop> ownedThings = new ArrayList<>();
-    public List<Integer> ownedCages = new ArrayList<>();
+
+
 
 
     public GamePlayer(Player player) {
         this.player = player;
-        if(!Skywars.getInstance().cageManager.cages.isEmpty()){
-            this.cageIndex = 0;
-            this.ownedCages.add(0);
-        } else {
-            Skywars.getInstance().getLogger().severe(ChatColor.RED + "" + ChatColor.BOLD + "Skywars> add a cage first");
 
-        }
     }
 
     public GamePlayer(GameTeam team) {
@@ -85,40 +77,6 @@ public class GamePlayer {
 
     }
 
-    public int getSelectedCageIndex(){
-        return cageIndex;
-    }
-
-    public Cage getSelectedCage(){
-        return Skywars.getInstance().cageManager.cages.get(cageIndex);
-    }
-
-    public boolean setSelectedCageIndex(int toIndex){
-        if(ownedCages.contains(toIndex)){
-            this.cageIndex = toIndex;
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    public boolean addOwnedCage(int toAddCage){
-        if(toAddCage >= Skywars.getInstance().cageManager.cages.size()){
-            //index not exists
-            return false;
-        }else{
-            // index exists
-            this.ownedCages.add(toAddCage);
-            //;)
-            return true;
-        }
-
-    }
-
-    public void addOwnedThing(ItemShop toAdd){
-        ownedThings.add(toAdd);
-    }
 
 
 

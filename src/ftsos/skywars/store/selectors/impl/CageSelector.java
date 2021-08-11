@@ -4,6 +4,7 @@ import ftsos.skywars.Skywars;
 import ftsos.skywars.cage.Cage;
 import ftsos.skywars.cage.CageManager;
 import ftsos.skywars.objects.GamePlayer;
+import ftsos.skywars.objects.SwPlayer;
 import ftsos.skywars.store.itemShop.ItemShop;
 import ftsos.skywars.store.selectors.Selector;
 import org.bukkit.Bukkit;
@@ -12,18 +13,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CageSelector extends Selector {
 
     public CageManager cageManager = Skywars.getInstance().cageManager;
-    private GamePlayer player;
+    private SwPlayer player;
     private List<ItemStack> invIcons = new ArrayList<ItemStack>();
     private List<Cage> cages = new ArrayList<Cage>();
 
-    public CageSelector(GamePlayer p){
+    public CageSelector(SwPlayer p){
         this.player = p;
     }
 
@@ -36,7 +36,7 @@ public class CageSelector extends Selector {
         for (int i = 0; i < invIcons.size(); i++){
             ItemStack item = invIcons.get(i);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(cages.get(i).name);
+            meta.setDisplayName(ChatColor.YELLOW + "Cage> " + cages.get(i).name);
             inv.setItem(i, item);
         }
         ItemStack closeStainedRedClay = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);

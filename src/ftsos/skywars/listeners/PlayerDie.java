@@ -47,7 +47,7 @@ public class PlayerDie implements Listener {
 
                     new EndSwGame(game).runTaskLater(Skywars.getInstance(), 100);
                 } catch (Exception ignored){
-
+                    ignored.printStackTrace();
                 }
 
             }

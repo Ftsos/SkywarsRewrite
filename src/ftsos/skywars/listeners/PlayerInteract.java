@@ -2,6 +2,7 @@ package ftsos.skywars.listeners;
 
 import ftsos.skywars.Skywars;
 import ftsos.skywars.objects.GamePlayer;
+import ftsos.skywars.objects.SwPlayer;
 import ftsos.skywars.store.selectors.impl.CageSelector;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerInteract implements Listener {
-    //TODO PLS DO A REFACTOR PLS A LIL OF THIS CODE IS REALLY DIFFICULT TO UNDERSTAND
-    //TODO add a handler
     @EventHandler
     public void onPlayerUse(PlayerInteractEvent event){
         Player player = event.getPlayer();
@@ -34,11 +33,16 @@ public class PlayerInteract implements Listener {
               //  Skywars.getInstance().getServer().getLogger().info("Skywars> Right Click Paper");
 
                 try {
-                   GamePlayer gPlayer = Skywars.getInstance().getGame(player).getGamePlayer(player);
                   // gPlayer.addOwnedCage(0);
+                    for (int i = 0; i < Skywars.getInstance().players.size(); i++){
+                        SwPlayer playerSw = Skywars.getInstance().players.get(i);
+                        if(playerSw.getPlayer().getUniqueId().equals(player.getUniqueId())){
+                            CageSelector cageSelector = new CageSelector(playerSw);
+                            cageSelector.displayGui();
+                            break;
+                        }
+                    }
 
-                   CageSelector cageSelector = new CageSelector(gPlayer);
-                   cageSelector.displayGui();
 
                } catch (Exception ex) {
                    ex.printStackTrace();

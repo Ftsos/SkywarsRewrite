@@ -32,7 +32,7 @@ public class VoidKill extends BukkitRunnable {
                             game.setWinner(game.getPlayers().get(0));
                             new EndSwGame(game).runTaskLater(Skywars.getInstance(), 100);
                         } catch (Exception ignored){
-
+                            ignored.printStackTrace();
                         }
 
                     }

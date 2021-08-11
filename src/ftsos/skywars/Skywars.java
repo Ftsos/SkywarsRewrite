@@ -5,11 +5,13 @@ import ftsos.skywars.admin.AdminGuiManager;
 import ftsos.skywars.admin.AdminKitGiveCommand;
 import ftsos.skywars.admin.AdminKitListener;
 import ftsos.skywars.cage.CageManager;
+import ftsos.skywars.comandos.AddCageCommand;
 import ftsos.skywars.comandos.skywarsCommand;
 import ftsos.skywars.listeners.*;
 import ftsos.skywars.listeners.EventListener;
 import ftsos.skywars.objects.GameDefinition;
 import ftsos.skywars.objects.GamePlayer;
+import ftsos.skywars.objects.SwPlayer;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -40,6 +42,7 @@ public class Skywars extends JavaPlugin {
 	public CageManager cageManager;
 	public AdminGuiManager adminGuiManager;
 	public EventHandler eventHandler;
+	public List<SwPlayer> players;
 	public void onEnable() {
 		instance = this;
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "[" + nombre + "]: " + version + ": " + "Ha Sido Activado");
@@ -56,6 +59,7 @@ public class Skywars extends JavaPlugin {
 		if(Bukkit.getPluginManager().getPlugin("WorldEdit") != null){
 			 this.worldEditPlugin = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
 		} else {
+			this.getServer().getPluginManager().disablePlugin(this);
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El plugin No se pudo activar por que world edit no esta activado");
 		}
 
@@ -64,6 +68,15 @@ public class Skywars extends JavaPlugin {
 		List<EventListener> listeners = new ArrayList<EventListener>();
 		listeners.add(new AdminKitListener());
 		this.eventHandler = new EventHandler(listeners);
+		this.players = new ArrayList<SwPlayer>();
+		if(this.getConfig().getConfigurationSection("players") != null){
+			for(String player : this.getConfig().getConfigurationSection("players").getKeys(false)){
+				if(Bukkit.getOfflinePlayer(UUID.fromString(player)).hasPlayedBefore()){
+				players.add(new SwPlayer(getConfig().getIntegerList("players." + player + ".ownedCages"), Bukkit.getOfflinePlayer(UUID.fromString(player)).getPlayer()) );
+				};
+			}
+		}
+
 	}
 
 	public void onDisable() {
@@ -102,6 +115,7 @@ public class Skywars extends JavaPlugin {
 	public void registerCommands() {
 		this.getCommand("skywars").setExecutor(new skywarsCommand(this));
 		this.getCommand("swadminkit").setExecutor(new AdminKitGiveCommand(this));
+		this.getCommand("addcagecommand").setExecutor(new AddCageCommand());
 	}
 
 	public void registerEvents() {
@@ -116,6 +130,8 @@ public class Skywars extends JavaPlugin {
 		pm.registerEvents(new PlayerHit(), this);
 		pm.registerEvents(new ChangedWorld(), this);
 		pm.registerEvents(new PlayerQuit(), this);
+		pm.registerEvents(new DamageEvent(), this);
+		pm.registerEvents(new PlayerJoin(), this);
 	}
 
 	private Location lobbyPoint = null;

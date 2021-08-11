@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021. Please give me credit, -Ftsos
+ */
+
 package ftsos.skywars.listeners;
 
 import ftsos.skywars.Skywars;
@@ -40,5 +44,12 @@ public class InventoryListener implements Listener {
         //p.sendMessage("You clicked at slot " + e.getRawSlot());
 
         //Select That cage as default
+        //TODO
+        if(!clickedItem.hasItemMeta()) return;
+        if(!clickedItem.getItemMeta().hasDisplayName()) return;
+        if(clickedItem.getItemMeta().getDisplayName().contains(ChatColor.YELLOW + "Item> ")){
+
+        }
+
     }
 }

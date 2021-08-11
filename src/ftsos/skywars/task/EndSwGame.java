@@ -16,7 +16,7 @@ public class EndSwGame extends BukkitRunnable {
             game.finishGame(game.getWinner());
 
         } catch (Exception ig) {
-
+            ig.printStackTrace();
         }
     }
 }
