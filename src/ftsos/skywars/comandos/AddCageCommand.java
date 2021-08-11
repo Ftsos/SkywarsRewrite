@@ -20,12 +20,24 @@ public class AddCageCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         try {
-            if(sender instanceof Player) return false;
-            if(args.length != 2) return false;
+            if(sender instanceof Player) {
+                sender.sendMessage("Unknown command. Type \"/help\" for help.");
+                return false;
+            }
+
+            if(args.length != 2) {
+                sender.sendMessage("Usage. /addcagecommand <uuidplayer> <cagename>");
+                return false;
+            }
+
             String uuidString = args[0];
             UUID uuidPlayer = UUID.fromString(uuidString);
             Player player = Skywars.getInstance().getServer().getPlayer(uuidPlayer);
-            if(player == null) return false;
+            if(player == null) {
+                sender.sendMessage("That player is not online");
+                return false;
+            }
+
             SwPlayer swPlayer = null;
             for (SwPlayer swPlayerLoop : Skywars.getInstance().players){
                 if (swPlayerLoop.getPlayer().getUniqueId() == player.getUniqueId()){
@@ -33,9 +45,17 @@ public class AddCageCommand implements CommandExecutor {
                     break;
                 }
             }
-            if(swPlayer == null) return false;
+            if(swPlayer == null) {
+                sender.sendMessage("You never has connected");
+                return false;
+            }
+
             String cageName = args[1];
-            if (cageName == "" || cageName == null) return false;
+            if (cageName == "" || cageName == null) {
+                sender.sendMessage("cage name is empty or null");
+                return false;
+            }
+
             Cage cage = null;
             for (Cage cageLoop : Skywars.getInstance().cageManager.cages){
                 if (cageLoop.name == cageName){
@@ -44,7 +64,11 @@ public class AddCageCommand implements CommandExecutor {
                 }
             }
 
-            if (cage == null) return false;
+            if (cage == null) {
+                sender.sendMessage("That cage doesn't exist");
+                return false;
+            }
+
             swPlayer.addOwnedCage(Skywars.getInstance().cageManager.cages.indexOf(cage));
             Skywars.getInstance().getServer().getLogger().info(ChatColor.GREEN + "Done!");
             return true;
