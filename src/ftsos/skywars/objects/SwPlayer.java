@@ -11,14 +11,12 @@ public class SwPlayer {
     public List<Integer> ownedCages;
     public Player player;
     public int cageIndex;
-    public SwPlayer(Player tP) {
-        this.player = tP;
-    }
+   
 
-    public SwPlayer(List<Integer> ownedCages, Player player) {
+    public SwPlayer(List<Integer> ownedCages, Player player, int cageIndex) {
         this.ownedCages = ownedCages;
         this.player = player;
-
+        this.cageIndex = cageIndex;
 
     }
 

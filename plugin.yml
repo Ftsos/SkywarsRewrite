@@ -7,5 +7,7 @@ commands:
     aliases: sw
   swadminkit:
       description: an admin kitsw command
+  addcagecommand:
+    description: awa
 depend:
   - WorldEdit

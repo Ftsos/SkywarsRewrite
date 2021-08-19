@@ -5,9 +5,12 @@
 package ftsos.skywars.listeners;
 
 import ftsos.skywars.Skywars;
+import ftsos.skywars.objects.SwPlayer;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,7 +51,19 @@ public class InventoryListener implements Listener {
         if(!clickedItem.hasItemMeta()) return;
         if(!clickedItem.getItemMeta().hasDisplayName()) return;
         if(clickedItem.getItemMeta().getDisplayName().contains(ChatColor.YELLOW + "Item> ")){
+            net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(clickedItem);
+            if(!nmsItem.hasTag()) return;
+            NBTTagCompound itemCompound = nmsItem.getTag();
+            int cageNumber = itemCompound.getInt("cage");
 
+            if(!Skywars.getInstance().cageManager.cages.contains(cageNumber)) {
+                Skywars.getInstance().getLogger().severe(ChatColor.RED + "ERROR!");
+            }
+
+            for(SwPlayer swPlayer : Skywars.getInstance().players){
+                if(swPlayer.getPlayer().getUniqueId() != p.getUniqueId()) continue;
+                swPlayer.setCageIndex(cageNumber);
+            }
         }
 
     }

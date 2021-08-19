@@ -71,8 +71,10 @@ public class Skywars extends JavaPlugin {
 		this.players = new ArrayList<SwPlayer>();
 		if(this.getConfig().getConfigurationSection("players") != null){
 			for(String player : this.getConfig().getConfigurationSection("players").getKeys(false)){
+				getLogger().info(ChatColor.RED + String.valueOf(Bukkit.getOfflinePlayer(UUID.fromString(player)).hasPlayedBefore()));
 				if(Bukkit.getOfflinePlayer(UUID.fromString(player)).hasPlayedBefore()){
-				players.add(new SwPlayer(getConfig().getIntegerList("players." + player + ".ownedCages"), Bukkit.getOfflinePlayer(UUID.fromString(player)).getPlayer()) );
+				players.add(new SwPlayer(getConfig().getIntegerList("players." + player + ".ownedCages"), Bukkit.getOfflinePlayer(UUID.fromString(player)).getPlayer(), getConfig().getInt("players." + player + ".cageIndex")));
+
 				};
 			}
 		}

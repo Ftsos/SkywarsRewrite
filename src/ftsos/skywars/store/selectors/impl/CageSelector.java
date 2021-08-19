@@ -7,9 +7,13 @@ import ftsos.skywars.objects.GamePlayer;
 import ftsos.skywars.objects.SwPlayer;
 import ftsos.skywars.store.itemShop.ItemShop;
 import ftsos.skywars.store.selectors.Selector;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagInt;
+import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +41,14 @@ public class CageSelector extends Selector {
             ItemStack item = invIcons.get(i);
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ChatColor.YELLOW + "Cage> " + cages.get(i).name);
-            inv.setItem(i, item);
+            item.setItemMeta(meta);
+            net.minecraft.server.v1_8_R3.ItemStack itemNms = CraftItemStack.asNMSCopy(item);
+            NBTTagCompound itemCompound = (itemNms.hasTag()) ? itemNms.getTag() : new NBTTagCompound();
+            itemCompound.set("cage", new NBTTagInt(this.player.ownedCages.get(i)));
+            itemNms.setTag(itemCompound);
+            ItemStack itemStack = CraftItemStack.asBukkitCopy(itemNms);
+
+            inv.setItem(i, itemStack);
         }
         ItemStack closeStainedRedClay = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
         ItemMeta metaCloseStainedRedClay = closeStainedRedClay.getItemMeta();

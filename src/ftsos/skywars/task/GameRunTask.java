@@ -34,6 +34,7 @@ public class GameRunTask extends BukkitRunnable {
 
                 for (SwPlayer swPlayer : Skywars.getInstance().players){
                     if(!swPlayer.player.getUniqueId().equals(player.getPlayer().getUniqueId())) continue;
+                    //Null Pointer Exception
                     EditSession es = swPlayer.getSelectedCageIndex().pasteIt(player.getPlayer().getLocation());
                     editSessions.add(es);
                 }
