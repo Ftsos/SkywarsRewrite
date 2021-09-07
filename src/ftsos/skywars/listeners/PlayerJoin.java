@@ -30,10 +30,8 @@ public class PlayerJoin implements Listener {
             config.set("players." + player.getUniqueId() + ".cageIndex", swPlayer.getCageIndex());
             Skywars.getInstance().saveConfig();
             Skywars.getInstance().reloadConfig();
-            Bukkit.broadcastMessage(ChatColor.RED + "Eyeyeyey " + ChatColor.GOLD + e.getPlayer().getName() + ChatColor.YELLOW + " Se ha Conectado" + " y no esta registrado unu");
+           // Bukkit.broadcastMessage(ChatColor.RED + "Eyeyeyey " + ChatColor.GOLD + e.getPlayer().getName() + ChatColor.YELLOW + " Se ha Conectado" + " y no esta registrado unu");
 
-        } else {
-            Bukkit.broadcastMessage(ChatColor.RED + "Eyeyeyey " + ChatColor.GOLD + e.getPlayer().getName() + ChatColor.YELLOW + " Se ha Conectado");
         }
     }
 }

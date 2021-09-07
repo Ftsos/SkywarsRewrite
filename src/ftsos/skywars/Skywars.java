@@ -6,7 +6,7 @@ import ftsos.skywars.admin.AdminKitGiveCommand;
 import ftsos.skywars.admin.AdminKitListener;
 import ftsos.skywars.cage.CageManager;
 import ftsos.skywars.comandos.AddCageCommand;
-import ftsos.skywars.comandos.skywarsCommand;
+import ftsos.skywars.comandos.SkywarsCommand;
 import ftsos.skywars.listeners.*;
 import ftsos.skywars.listeners.EventListener;
 import ftsos.skywars.objects.GameDefinition;
@@ -17,8 +17,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -26,7 +24,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 
@@ -115,7 +112,7 @@ public class Skywars extends JavaPlugin {
 	}
 
 	public void registerCommands() {
-		this.getCommand("skywars").setExecutor(new skywarsCommand(this));
+		this.getCommand("skywars").setExecutor(new SkywarsCommand(this));
 		this.getCommand("swadminkit").setExecutor(new AdminKitGiveCommand(this));
 		this.getCommand("addcagecommand").setExecutor(new AddCageCommand());
 	}
