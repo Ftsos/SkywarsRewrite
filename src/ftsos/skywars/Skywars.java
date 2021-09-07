@@ -6,7 +6,7 @@ import ftsos.skywars.admin.AdminKitGiveCommand;
 import ftsos.skywars.admin.AdminKitListener;
 import ftsos.skywars.cage.CageManager;
 import ftsos.skywars.comandos.AddCageCommand;
-import ftsos.skywars.comandos.SkywarsCommand;
+import ftsos.skywars.comandos.skywarsCommand;
 import ftsos.skywars.listeners.*;
 import ftsos.skywars.listeners.EventListener;
 import ftsos.skywars.objects.GameDefinition;
@@ -112,7 +112,7 @@ public class Skywars extends JavaPlugin {
 	}
 
 	public void registerCommands() {
-		this.getCommand("skywars").setExecutor(new SkywarsCommand(this));
+		this.getCommand("skywars").setExecutor(new skywarsCommand(this));
 		this.getCommand("swadminkit").setExecutor(new AdminKitGiveCommand(this));
 		this.getCommand("addcagecommand").setExecutor(new AddCageCommand());
 	}
