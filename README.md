@@ -4,3 +4,5 @@ Ummmm, why are you here, this project isn't even finished, buuut if you like it,
 be given **ANY** kind of support
 
 A lot of message in this plugin are in spanish and you can change that too, pero primero tienes que descubrir que dicen para poder cambiarlos **_;)_**
+
+**Based on JordanOsterberg Skywars**
