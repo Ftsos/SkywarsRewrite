@@ -5,4 +5,6 @@ be given **ANY** kind of support
 
 A lot of message in this plugin are in spanish and you can change that too, pero primero tienes que descubrir que dicen para poder cambiarlos **_;)_**
 
+This **do not** represent my actual coding skils
+
 **Based on JordanOsterberg Skywars**
